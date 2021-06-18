@@ -1,0 +1,209 @@
+<div class="tableHeaderFilterArea">
+    <table class="full-width">
+        <tr>
+            <td>
+                <div>
+
+                </div>
+            </td>
+            <td style="text-align: right;padding-right: 15px;vertical-align: middle;">
+                <p-button icon="pi pi-plus-circle" label="Stock" (click)="showCreateStock()"></p-button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="padding: 10px;" *ngIf="!createStockFlag">
+    <table mat-table [dataSource]="productStocks" class="mat-elevation-z8 full-width">
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>  </th>
+            <td mat-cell *matCellDef="let element"> 
+                <button mat-icon-button style="color:blanchedalmond;" title="Market Live">
+                    <mat-icon>done_all</mat-icon>
+                  </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef> Product </th>
+            <td mat-cell *matCellDef="let element">
+             {{element.productId.title}} </td>
+        </ng-container>
+        <ng-container matColumnDef="batch">
+            <th mat-header-cell *matHeaderCellDef> Batch </th>
+            <td mat-cell *matCellDef="let element"> {{element.batch}} </td>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef> Quantity </th>
+            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="avail_quantity">
+            <th mat-header-cell *matHeaderCellDef> avail_Quantity </th>
+            <td mat-cell *matCellDef="let element"> {{element.availableQuantity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="package">
+            <th mat-header-cell *matHeaderCellDef> Package </th>
+            <td mat-cell *matCellDef="let element"> 
+                <span *ngIf="element.salePackage==1">Standard</span>
+                <span *ngIf="element.salePackage==2">Offer</span>
+                <span *ngIf="element.salePackage==3">Combo Pack</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef> Unit Price </th>
+            <td mat-cell *matCellDef="let element"> 
+                {{element.price}} 
+                <span *ngIf="element.salePackage==2" style="color:chartreuse;">  / {{element.offerPrice}}</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="expired">
+            <th mat-header-cell *matHeaderCellDef> Expired At </th>
+            <td mat-cell *matCellDef="let element"> {{element.expiredAt | date}} </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button  class="deleteButton" title="Delete "  (click)="deleteStock(element.id)" >
+                    <mat-icon>delete_outline</mat-icon> 
+                  </button>
+                  <button mat-icon-button style="color:cornflowerblue;" *ngIf="element.trade==0" (click)="editStock(element.id)"
+                    title="Edit ">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                  <button mat-icon-button style="color:tomato;" title=" Move to market " *ngIf="element.trade==0" (click)="markStockToSale(element.id)"> 
+                    <mat-icon>trending_flat</mat-icon>
+                  </button>
+                  <button mat-icon-button style="color:springgreen;" title="Market On" *ngIf="element.trade==1"> 
+                    <mat-icon>trending_up</mat-icon>
+                  </button>
+                  
+            </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+<div style="padding-top:10px; height: auto;text-align: center;" *ngIf="createStockFlag">
+    <div style="background-color:#3c4552;border-radius: 10px;padding-right: 50px;">
+        <form [formGroup]="stockForm">
+            <table class="full-width">
+                <tr>
+                    <td style="width:10%;"> </td>
+                    <td style="width:80%;text-align:left;padding-top:30px;">
+                        <h2>Add New Stock</h2>
+                        <div style="padding-bottom: 50px;">
+                            <table class="full-width">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Product</mat-label>
+                                            <input matInput required type="text" formControlName="product"
+                                                placeholder="Product" [matAutocomplete]="auto" />
+                                            <mat-autocomplete #auto="matAutocomplete"
+                                                (optionSelected)="selectAutoProduct($event)">
+                                                <mat-option *ngFor="let product of products " [value]="product">
+                                                    {{product.title}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Batch Number</mat-label>
+                                            <input type="text" matInput required formControlName="batch"
+                                                placeholder="Batch" autocomplete="off" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Quantity</mat-label>
+                                            <input type="number" matInput required formControlName="quantity"
+                                                placeholder="Stock Quantity" autocomplete="off"
+                                                (keyup)="addQuantity($event)" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Available Quantity</mat-label>
+                                            <input type="text" readonly matInput required
+                                                formControlName="availableQuantity" placeholder="Available Quantity"
+                                                autocomplete="off" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                        <label style="color:#c4c4c4;">Package &nbsp;</label>
+                                        <mat-radio-group aria-label="Package" formControlName="salePackage" required
+                                            (change)="changeSelect($event)">
+                                            <mat-radio-button value="1">Standard</mat-radio-button>
+                                            <mat-radio-button value="2">Offer</mat-radio-button>
+                                            <mat-radio-button value="3">Combo Pack</mat-radio-button>
+                                        </mat-radio-group>
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Expired At</mat-label>
+                                            <input matInput [matDatepicker]="picker" required
+                                                formControlName="expiredAt">
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Price</mat-label>
+                                            <input matInput type="number" required formControlName="price"
+                                                autocomplete="off">
+
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr *ngIf="selectPackage ==2">
+                                    <td>
+                                        <mat-form-field class="full-width">
+                                            <mat-label>Offer Price</mat-label>
+                                            <input matInput type="number" required formControlName="offerPrice"
+                                                autocomplete="off">
+
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="text-align: right;">
+                                            <button mat-raised-button type="button" (click)="cancelCreateStock()">
+                                                Cancel </button>
+                                            <button mat-raised-button color="primary" style="margin-left:10px;"
+                                                [disabled]="!stockForm.valid" (click)="createNewStock()"> Create
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </td>
+                    <td style="width:10%;"> </td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+</div>

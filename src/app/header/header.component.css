@@ -1,0 +1,82 @@
+.pageHeaderRow {
+    height: 60px;
+    border: none;
+    background-color: #293241;
+}
+.header-row-coloumn1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 0.5em;
+    font-weight: 800;
+}
+
+.header-row-coloumn2 {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 0.5em;
+    text-align: right;
+    font-weight: 800;
+    padding-right: 80px;
+    padding-top: 10px;
+    font-size: 16px;
+}
+.dropDown{
+    color: #293241;
+}
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+    animation: custom-progress-spinner-dash 1.5s ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite;
+}
+
+@keyframes custom-progress-spinner-color {
+    100%,
+    0% {
+        stroke: #010fcc;
+    }
+    20% {
+        stroke: #0165fc;
+    }
+    40%{
+        stroke: #ff3503;
+    }
+    66% {
+        stroke: #00f900;
+    }
+    80%{
+        stroke: #ff3503;
+    }
+    90% {
+        stroke: #fff700;
+    }
+}
+
+@keyframes custom-progress-spinner-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+
+.p-dialog .p-dialog-content {
+    background: #ffffff;
+    color: #495057;
+    padding: 10px;
+}
+.loader-container{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    opacity: 0.7;
+    margin-top: -50px;
+    z-index: 20000;
+}

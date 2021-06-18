@@ -1,0 +1,156 @@
+<div id="outer" *ngIf="visible">
+  <div id="blueDiv">
+    <div class="auth-app-header">SALER</div>
+    <p-card *ngIf="!register">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <table class="full-width" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                <mat-label>Enter your email</mat-label>
+                <input matInput placeholder="pat@example.com" formControlName="email" required  autocomplete="off">
+                <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched ">
+                  <span *ngIf="loginForm.get('email')?.errors?.required">
+                    Email is required
+                  </span>
+                  <span *ngIf="loginForm.get('email')?.errors?.email">
+                    Please, provide a valid Email
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                 
+                <input matInput type="password" placeholder="Password" formControlName="password" required autocomplete="off">
+                <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ">
+                  <span *ngIf="loginForm.get('password')?.errors?.required">
+                    Password is required
+                  </span>
+                  <span *ngIf="loginForm.get('password')?.errors?.minlength">
+                    Should contain minimum 5 character
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button mat-raised-button type="submit" color="primary" style="width: 100%;" [disabled]="!loginForm.valid">Login</button>
+             
+            </td>
+          </tr>
+          </table>
+
+      
+        <div style="padding-top: 20px;">
+          <p-button label="Forget your password.?" styleClass="p-button-link " style="color:#293241;"></p-button>
+          <button pButton pRipple type="button" label="Sign Up" class="p-button-outlined p-button-secondary"
+            (click)="switchLoginSection()"></button>
+        </div>
+
+      </form>
+
+    </p-card>
+
+    <mat-card *ngIf="register">
+      <div class="registerDiv">
+        <form [formGroup]="registerForm" (ngSubmit)="submit()">
+        <table class="full-width" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Name" formControlName="name" required autocomplete="off">
+                <mat-error *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched ">
+                  <span  >
+                    Please provide your name
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                <mat-label>Enter your email</mat-label>
+                <input matInput placeholder="pat@example.com" formControlName="email" required  autocomplete="off">
+                <mat-error *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched ">
+                  <span *ngIf="registerForm.get('email')?.errors?.required">
+                    Email is required
+                  </span>
+                  <span *ngIf="registerForm.get('email')?.errors?.email">
+                    Please, provide a valid Email
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                <mat-label>Enter your mobile numer</mat-label>
+                <input matInput placeholder="9999999999" formControlName="mobile" type="tel" required autocomplete="off"> 
+                <mat-error *ngIf="registerForm.get('mobile')?.invalid && registerForm.get('mobile')?.touched ">
+                  <span *ngIf="registerForm.get('mobile')?.errors?.required">
+                    Mobile number is required
+                  </span>
+                  <span *ngIf="registerForm.get('mobile')?.errors?.pattern">
+                    Please, Enter 10 digit Mobile Number
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                 
+                <input matInput type="password" placeholder="Password" formControlName="password" required autocomplete="off">
+                <mat-error *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched ">
+                  <span *ngIf="registerForm.get('password')?.errors?.required">
+                    Password is required
+                  </span>
+                  <span *ngIf="registerForm.get('password')?.errors?.minlength">
+                    Should contain minimum 5 character
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="full-width">
+                <input matInput type="password" placeholder="Confirm Password" formControlName="confirm" required autocomplete="off">
+                <mat-error *ngIf="registerForm.get('confirm')?.invalid && registerForm.get('confirm')?.touched ">
+                  <span *ngIf="registerForm.get('confirm')?.hasError('required')">
+                    Password is required
+                  </span>
+                  
+                  <span *ngIf="f.confirm.errors?.confirmedValidator">
+                    Passwords don't match.
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button mat-raised-button type="submit" color="primary" style="width: 100%;" [disabled]="!registerForm.valid">CREATE ACCOUNT</button>
+             
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+              <p-button  label="already have an account.?"  (click)="switchLoginSection()" styleClass="p-button-link " ></p-button>
+            </td>
+          </tr>
+        </table>
+         </form>
+      </div>
+    </mat-card>
+
+
+  </div>
+</div>

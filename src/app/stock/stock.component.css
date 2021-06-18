@@ -1,0 +1,7 @@
+.mat-form-field-appearance-legacy .mat-form-field-label {
+    color: rgba(227, 214, 214, 0.54);
+}
+mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+  

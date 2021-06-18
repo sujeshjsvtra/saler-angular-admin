@@ -1,0 +1,184 @@
+<div id="productFilterMenuId">
+    <table class="full-width">
+        <tr>
+            <td>
+                <div>
+                    <mat-form-field>
+                        <mat-label style="color:#FFF;"> Category</mat-label>
+                        <mat-select class="full-width" (selectionChange)="changeCategory($event)">
+                            <mat-optgroup *ngFor="let group of categoryGroupType" [label]="group.categoryType" >
+                                    <mat-option *ngFor="let category of group.categoryList" [value]="category.id">
+                                        {{category.categoryName}}
+                                    </mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </td>
+            <td style="text-align: right;padding-right: 15px;">
+                <p-button (click)="showModalDialog()" icon="pi pi-plus-circle" label="Product"></p-button>
+            </td>
+        </tr>
+    </table>
+</div>
+<br style="height: 50px;" />
+<div style="padding: 10px;">
+    <table mat-table [dataSource]="products" class="mat-elevation-z8 full-width">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> Id. </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef> Product Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="subtitle">
+            <th mat-header-cell *matHeaderCellDef> Subtitle </th>
+            <td mat-cell *matCellDef="let element">{{element.subTitle}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="hsncode">
+            <th mat-header-cell *matHeaderCellDef> Hsn Code </th>
+            <td mat-cell *matCellDef="let element"> {{element.hsncode}} </td>
+        </ng-container>
+ 
+        <ng-container matColumnDef="unit">
+            <th mat-header-cell *matHeaderCellDef> Unit </th>
+            <td mat-cell *matCellDef="let element"> {{element.weight}} {{element.unit}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button style="color:#FFEA00;font-weight: 700;" (click)="deleteProduct(element.id,element.title)" title="Delete {{element.categoryName}}" >
+                    <mat-icon>delete_outline</mat-icon> 
+                  </button>
+            </td>
+        </ng-container>
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+<p-dialog header="Create Product" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}"
+    [baseZIndex]="999" [draggable]="false" [resizable]="false">
+    <form [formGroup]="productForm">        
+        <table class="full-width" >
+            <tr>
+                <td>
+                    <mat-form-field class="full-width">
+                        <mat-label>Product Title</mat-label>
+                        <input matInput formControlName="title" placeholder="Product name" required>
+
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="full-width">
+                        <mat-label>Sub Title</mat-label>
+                        <input matInput formControlName="subTitle" placeholder="Author/ModelNo:/.." required>
+
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-form-field class="full-width">
+                        <mat-label>Detials</mat-label>
+                        <textarea matInput formControlName="description" placeholder="About Product" required>
+                        </textarea>
+                    </mat-form-field>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <mat-form-field class="full-width">
+                        <mat-label>Hsn Code </mat-label>
+                        <input matInput formControlName="hsncode" required>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <mat-form-field class="full-width">
+                                    <mat-label>Weight</mat-label>
+                                    <input matInput formControlName="weight" required>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-radio-group aria-label="Select an option" formControlName= "unit">
+                                    <mat-radio-button value="grm" selected >Gram</mat-radio-button>
+                                    <mat-radio-button value="kg">Kilo Gram</mat-radio-button>
+                                    <mat-radio-button value="ml">Millilitre</mat-radio-button>
+                                    <mat-radio-button value="ltr">Litre</mat-radio-button>
+                                  </mat-radio-group>
+                                  
+                              
+                            </td>
+                        </tr>
+                    </table>
+
+                    
+                </td>
+            </tr> 
+                
+            
+        </table>
+
+    </form>
+    <ng-template pTemplate="footer">
+        <button mat-raised-button type="submit" color="warn" (click)="cancelProduct()">Cancel</button>
+        <button mat-raised-button type="submit" color="primary" (click)="createProduct()"
+            [disabled]="!productForm.valid">submit</button>
+    </ng-template>
+</p-dialog>
+<p-dialog header="Update Gallery" [(visible)]="galleryModal" [modal]="true" [style]="{width: '50vw'}"
+    [baseZIndex]="999" [draggable]="false" [resizable]="false">
+    <form [formGroup]="galleryForm" >
+    <table>
+        <tr>
+            <td>
+                <label>Product Image</label>
+                <input type="file" id="file" formControlName="file" (change)="onFileUpload($event)"
+                style="margin: 8px;
+                    padding: 8px 5px;
+                    color: #333;
+                    width: auto;
+                    cursor: pointer;" > 
+               
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Galleries
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="file" id="file" formControlName="gallery" multiple (change)="onUpload($event)"
+                style="margin: 8px;
+                    padding: 8px 5px;
+                    color: #333;
+                    width: auto;
+                    cursor: pointer;" > 
+            </td>
+        </tr>
+    </table>
+    </form>
+    <ng-template pTemplate="footer">
+        <button mat-raised-button type="submit" color="warn" (click)="cancelGalleryModal()">Cancel</button>
+        <button mat-raised-button type="submit" color="primary" (click)="createProductGallery()"
+            [disabled]="!galleryForm.valid">submit</button>
+    </ng-template>
+</p-dialog>
